@@ -13,11 +13,11 @@ public class DatabaseInitiator {
     public Connection getCreatedConnection() {
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName(Constant.JDBC_DRIVER);
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/Digistore",
-                    "root",
-                    "aminty2015");
+                    Constant.URL,
+                    Constant.USER,
+                    Constant.PASSWORD);
             PrintMessage.showMsg(Constant.CREATE_CONN_SUCCESSFULY);
             return connection;
         } catch (Exception e) {
