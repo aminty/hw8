@@ -11,13 +11,13 @@ public class Validation {
         Pattern pt = Pattern.compile(regex);
         while (true) {
             try {
-                System.out.print(msg);
+                System.out.print("-> "+msg);
                 input = new Scanner(System.in).next();
                 Matcher mt = pt.matcher(input);
                 if (mt.matches()) return input;
                  else throw new Exception(errMsg);
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                PrintMessage.showErr(e.getMessage());
             }
         }
     }

@@ -8,7 +8,7 @@ import java.sql.Statement;
 public class ProductRepo<R, T> implements CommonQuery<R, T> {
 
     @Override
-    public boolean isExist(T arg) throws SQLException {
+    public boolean isExist(T arg, String column) throws SQLException {
         return false;
     }
 
@@ -26,7 +26,7 @@ public class ProductRepo<R, T> implements CommonQuery<R, T> {
     }
 
     @Override
-    public void insert(T[] arg) throws SQLException {
+    public void insert(T arg) throws SQLException {
     }
 
     @Override
