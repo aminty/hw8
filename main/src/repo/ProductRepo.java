@@ -1,5 +1,6 @@
 package repo;
 
+import entity.Product;
 import service.ApplicationObject;
 import service.PrintMessage;
 
@@ -13,12 +14,35 @@ public class ProductRepo<R, T> implements BaseRepo<R, T> {
 
     @Override
     public boolean isExist(T arg, String column) throws SQLException {
-        return false;
+            PreparedStatement ps = ApplicationObject.getConnection().prepareStatement(
+                    "select * from product where " + column + "=?");
+            if (arg.getClass().getSimpleName().equals(String.class.getSimpleName()))
+                ps.setString(1, (String) arg);
+            if (arg.getClass().getSimpleName().equals(Integer.class.getSimpleName()))
+                ps.setInt(1, (Integer) arg);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
     }
 
     @Override
-    public R find(T arg, String column, String where) throws SQLException {
-        return null;
+    public R find(T arg, String beSelect, String whichColumn) throws SQLException {
+        Product product=new Product();
+        PreparedStatement ps=ApplicationObject.getConnection().prepareStatement(
+                "select "+beSelect+" from product where "+ whichColumn +" = ?;"
+        );
+        if (arg.getClass().getSimpleName().equals(String.class.getSimpleName()))
+            ps.setString(1, (String) arg);
+        if (arg.getClass().getSimpleName().equals(Integer.class.getSimpleName()))
+            ps.setInt(1, (Integer) arg);
+
+        ResultSet rs=ps.executeQuery();
+        if (rs.next()){
+            product.setId(rs.getInt("id"));
+            product.setName(rs.getString("name"));
+            product.setPrice(rs.getInt("price"));
+            return (R) product;
+        }
+        return (R) product;
     }
 
     @Override
@@ -65,7 +89,7 @@ public class ProductRepo<R, T> implements BaseRepo<R, T> {
                 "count double ," +
                 "sub_cat_id int ," +
                 "main_cat_id int ," +
-                "price double ," +
+                "price int ," +
                 "Foreign Key  (main_cat_id) references main_category(id)," +
                 "FOREIGN KEY (sub_cat_id) references sub_category(id))");
         st.close();

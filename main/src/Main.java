@@ -11,13 +11,14 @@ public class Main {
         ApplicationObject.firstDbInitiator();
         try {
 
-        Menu.runMenu();
+        Menu.runPublicMenu();
         }catch (Exception e){
             PrintMessage.showErr(Constant.SOMETHING_WENT_WRONG);
-            System.out.println(e.getMessage());
+            PrintMessage.showErr(e.getMessage());
         }
         finally {
-            Menu.runMenu();
+            //todo Q4
+            Menu.runPublicMenu();
         }
 
 

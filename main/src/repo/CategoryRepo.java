@@ -13,7 +13,7 @@ public class CategoryRepo <R,T> implements BaseRepo<R,T> {
     }
 
     @Override
-    public R find(T arg, String column, String where) throws SQLException {
+    public R find(T arg, String column, String whichColumn) throws SQLException {
         return null;
     }
 

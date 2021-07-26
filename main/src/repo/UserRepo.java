@@ -26,9 +26,9 @@ public class UserRepo<R, T> implements BaseRepo<R, T> {
     }
 
     @Override
-    public R find(T arg, String beSelect,String where) throws SQLException {
+    public R find(T arg, String beSelect,String whichColumn) throws SQLException {
         PreparedStatement ps=ApplicationObject.getConnection().prepareStatement(
-                "select "+beSelect+" from user where "+where+" = ?;"
+                "select "+beSelect+" from user where "+ whichColumn +" = ?;"
         );
         if (arg.getClass().getSimpleName().equals(String.class.getSimpleName()))
             ps.setString(1, (String) arg);

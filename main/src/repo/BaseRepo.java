@@ -5,7 +5,7 @@ import java.sql.SQLException;
 public interface BaseRepo<R, T> {
     boolean isExist(T arg, String column) throws SQLException;
 
-    R find(T arg, String column, String where) throws SQLException;
+    R find(T arg, String column, String whichColumn) throws SQLException;
 
     void findAll() throws SQLException;
 
