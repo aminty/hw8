@@ -23,9 +23,11 @@ public class Constant {
     public static final String CHOOSE_PASSWORD = "Choose your password: ";
     public static final String WELCOM = "Welcome";
     public static final String APPLOCATION_CLOSED = "Applocation closed !";
-    public static final String VALUE_IS_EXIST = "Sorry ! this value is exist . ";
+    public static final String USER_IS_EXIST = "Sorry ! this username is exist . ";
+    public static final String SOMETHING_WENT_WRONG = "Something went wrong !";
     public static final String CREATE_CONN_SUCCESSFULY = "Connection created successfuly .";
     public static final String LOGIN_MENU_NAME = "L O G I N";
+    public static final String USER_ADDED = "User added successfuly .";
     public static final String SIGN_IN_MENU_NAME = "S I G N I N ";
     public static final String[] PUBLIC_MENU_ITEM = {"Login", "Signup", "Show product", "Exit"};
     public static final String[] USER_MENU_ITEM = {"Show cart", "My order history", "Change info", "Exit"};
@@ -37,4 +39,10 @@ public class Constant {
     public static final String USER = "root";
     public static final String PASSWORD = "aminty2015";
 
+    public static final String ENTER_YOUR_USERNAME = "Enter your username: ";
+    public static final String ENTER_YOUR_PASSWORD = "Enter your password: ";
+    public static final String INCORRECT_DATA = "Username or password in not true !";
+    public static final String SUCCESS_LOGIN = "You logged in successfuly .";
+    public static final String USERNAME_COL = "username";
+    public static final String PASSWORD_COL = "password";
 }

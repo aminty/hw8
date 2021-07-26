@@ -10,7 +10,8 @@ public class Menu {
 
     public static void runMenu() throws SQLException {
         PrintMessage.printMenu(Constant.PUBLIC_MENU_ITEM, Constant.WELCOM);
-        outer:{while (true) {
+        outer:{
+            while (true) {
             switch (Integer.parseInt(ApplicationObject.getValidation().isValid(
                     Constant.SINGLE_NUMBER_REGEX,
                     Constant.ENTER_NUMERIC_CHOICE,

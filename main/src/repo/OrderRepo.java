@@ -5,15 +5,20 @@ import service.ApplicationObject;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class OrderRepo<R,T> implements CommonQuery<R,T>{
+public class OrderRepo<R,T> implements BaseRepo<R,T> {
     @Override
     public   boolean isExist(T arg, String column) throws SQLException {
         return false;
     }
 
     @Override
-    public R find(T arg) throws SQLException {
+    public R find(T arg, String column, String where) throws SQLException {
         return null;
+    }
+
+    @Override
+    public void findAll() {
+
     }
 
     @Override
@@ -22,7 +27,7 @@ public class OrderRepo<R,T> implements CommonQuery<R,T>{
     }
 
     @Override
-    public void update(T[] arg) throws SQLException {
+    public void update(T arg) throws SQLException {
 
     }
 

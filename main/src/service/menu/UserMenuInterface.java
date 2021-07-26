@@ -9,7 +9,7 @@ public interface UserMenuInterface {
     void deleteFromCart(int productId)throws SQLException;
     void showCart() throws SQLException;
     void showOrder() throws SQLException;
-    void changeInfo(int id) throws SQLException;
+    void changePassword(int id) throws SQLException;
     void showProductWithoutLognin() throws SQLException;
 
 }

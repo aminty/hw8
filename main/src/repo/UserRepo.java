@@ -1,13 +1,16 @@
 package repo;
 
+import entity.User;
 import service.ApplicationObject;
+import service.Constant;
+import service.PrintMessage;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class UserRepo<R, T> implements CommonQuery<R, T> {
+public class UserRepo<R, T> implements BaseRepo<R, T> {
     @Override
     public boolean isExist(T arg, String column) throws SQLException {
         PreparedStatement ps = ApplicationObject.getConnection().prepareStatement(
@@ -23,8 +26,23 @@ public class UserRepo<R, T> implements CommonQuery<R, T> {
     }
 
     @Override
-    public R find(T arg) throws SQLException {
-        return null;
+    public R find(T arg, String beSelect,String where) throws SQLException {
+        PreparedStatement ps=ApplicationObject.getConnection().prepareStatement(
+                "select "+beSelect+" from user where "+where+" = ?;"
+        );
+        if (arg.getClass().getSimpleName().equals(String.class.getSimpleName()))
+            ps.setString(1, (String) arg);
+        if (arg.getClass().getSimpleName().equals(Integer.class.getSimpleName()))
+            ps.setInt(1, (Integer) arg);
+        ResultSet rs=ps.executeQuery();
+        if (rs.next())
+        return (R) rs.getString(beSelect);
+        else return (R) "0";
+    }
+
+    @Override
+    public void findAll() {
+
     }
 
     @Override
@@ -32,11 +50,22 @@ public class UserRepo<R, T> implements CommonQuery<R, T> {
     }
 
     @Override
-    public void update(T[] arg) throws SQLException {
+    public void update(T arg) throws SQLException {
     }
 
     @Override
     public void insert(T arg) throws SQLException {
+        User user=(User) arg;
+        PreparedStatement ps=ApplicationObject.getConnection().prepareStatement(
+                "insert into user(name, lastname, username, password) values (?,?,?,?)"
+        );
+        ps.setString(1,user.getFirstName());
+        ps.setString(2,user.getLastName());
+        ps.setString(3,user.getUsername());
+        ps.setString(4,user.getPassword());
+        ps.executeUpdate();
+        PrintMessage.showMsg(Constant.USER_ADDED);
+
     }
 
     @Override

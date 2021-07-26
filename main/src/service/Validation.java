@@ -13,6 +13,7 @@ public class Validation {
             try {
                 System.out.print("-> "+msg);
                 input = new Scanner(System.in).next();
+                if (input.equals("0"))return "0";
                 Matcher mt = pt.matcher(input);
                 if (mt.matches()) return input;
                  else throw new Exception(errMsg);
