@@ -1,5 +1,6 @@
 package service.menu;
 
+import repo.UserRepo;
 import service.ApplicationObject;
 import service.Constant;
 import service.PrintMessage;
@@ -41,6 +42,7 @@ public class Menu {
                     case 5 -> {PrintMessage.showMsg(Constant.GOODBYE+username) ;
                     UserMenu.isLoggedIn=false;
                     UserMenu.cartList.clear();
+                    UserMenu.username="";
                     break outer;
                     }
                     default -> PrintMessage.showErr(Constant.INVALID_INPUT);

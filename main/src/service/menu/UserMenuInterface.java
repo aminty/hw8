@@ -5,7 +5,6 @@ import java.sql.SQLException;
 public interface UserMenuInterface {
     void signup() throws SQLException;
     void login() throws SQLException;
-
     void addToCart()throws SQLException;
     void deleteFromCart()throws SQLException;
     void showCart() throws SQLException;

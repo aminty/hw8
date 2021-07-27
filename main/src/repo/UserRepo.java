@@ -75,7 +75,7 @@ public class UserRepo<R, T> implements BaseRepo<R, T> {
                 "id INT AUTO_INCREMENT PRIMARY KEY ," +
                 "name VARCHAR (20)," +
                 "lastname VARCHAR (20)," +
-                "username VARCHAR (20)," +
+                "username VARCHAR (20) unique ," +
                 "password VARCHAR (20))");
         st.close();
     }

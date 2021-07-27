@@ -20,8 +20,9 @@ public class PrintMessage {
     public static int printCartItem(Map<Integer,Product> map){
         int price=0;
         for (Map.Entry<Integer,Product> pair: map.entrySet()) {
-            System.out.format(" [ id: %d ] name: %s, price:%d, count:%d%n", pair.getKey(), pair.getValue().getName(),pair.getValue().getPrice(),pair.getValue().getCount());
-            price+=pair.getValue().getPrice();
+            System.out.format(" [ id: %d ] name: %s, price:%d, count:%d%n", pair.getKey(),
+                    pair.getValue().getName(),pair.getValue().getPrice(),pair.getValue().getCurrentCount());
+            price+=pair.getValue().getPrice()*pair.getValue().getCurrentCount();
         }
         System.out.println("------>|Sum of price is : "+price+"|");
         return price;

@@ -75,10 +75,20 @@ public class ProductRepo<R, T> implements BaseRepo<R, T> {
 
     @Override
     public void update(T arg) throws SQLException {
+        Product product=(Product)arg;
+        PreparedStatement ps =ApplicationObject.getConnection().prepareStatement(
+                "update product set count=? where id=?");
+        ps.setInt(1,product.getCount()-product.getCurrentCount());
+        ps.setInt(2,product.getId());
+        ps.executeUpdate();
     }
 
     @Override
     public void insert(T arg) throws SQLException {
+
+
+
+
     }
 
     @Override

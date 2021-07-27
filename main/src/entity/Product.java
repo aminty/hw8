@@ -6,6 +6,7 @@ public class Product {
     private String category;
     private int price;
     private  int count;
+    private int currentCount;
 
     public Product(){
 
@@ -16,6 +17,14 @@ public class Product {
         this.category = category;
         this.price = price;
         this.count=count;
+    }
+
+    public int getCurrentCount() {
+        return currentCount;
+    }
+
+    public void setCurrentCount(int currentCount) {
+        this.currentCount = currentCount;
     }
 
     public int getCount() {

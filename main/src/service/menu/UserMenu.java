@@ -1,7 +1,9 @@
 package service.menu;
 
+import entity.Order;
 import entity.Product;
 import entity.User;
+import repo.OrderRepo;
 import repo.ProductRepo;
 import repo.UserRepo;
 import service.ApplicationObject;
@@ -15,6 +17,7 @@ import java.util.Map;
 public class UserMenu implements UserMenuInterface {
     static boolean isLoggedIn = false;
     static Map<Integer, Product> cartList = new HashMap<>();
+    static String username;
 
     @Override
     public void signup() throws SQLException {
@@ -51,6 +54,7 @@ public class UserMenu implements UserMenuInterface {
             if (realPass.equals(password)) {
                 PrintMessage.showMsg(Constant.SUCCESS_LOGIN);
                 isLoggedIn = true;
+                this.username = username;
                 Menu.runDashboardMenu(username);
                 Menu.runPublicMenu();
             } else PrintMessage.showErr(Constant.INCORRECT_DATA);
@@ -59,6 +63,7 @@ public class UserMenu implements UserMenuInterface {
 
     @Override
     public void addToCart() throws SQLException {
+        Product product;
         ProductRepo<Product, Integer> productRepo = new ProductRepo<>();
         while (true) {
             int productId = Integer.parseInt(ApplicationObject.getValidation().isValid(Constant.SINGLE_NUMBER_REGEX,
@@ -68,8 +73,10 @@ public class UserMenu implements UserMenuInterface {
                     Constant.ENTER_PRODUCT_COUNT, Constant.INVALID_INPUT));
             if (productRepo.isExist(productId, "id")) {
                 if (cartList.size() < 5) {
-                    if (productRepo.find(productId, "*", "id").getCount() >= count)
-                        cartList.put(productId, productRepo.find(productId, "*", "id"));
+                    product = productRepo.find(productId, "*", "id");
+                    product.setCurrentCount(count);
+                    if (product.getCount() >= count)
+                        cartList.put(productId, product);
                     else PrintMessage.showMsg(Constant.COUNT_NOT_ENOUGH);
                 } else {
                     PrintMessage.showMsg(Constant.MAX_ITEM);
@@ -96,7 +103,7 @@ public class UserMenu implements UserMenuInterface {
 
     @Override
     public void showCart() throws SQLException {
-        if (cartList.isEmpty())PrintMessage.showMsg(Constant.CART_IS_EMPTY);
+        if (cartList.isEmpty()) PrintMessage.showMsg(Constant.CART_IS_EMPTY);
         PrintMessage.printCartItem(cartList);
         if (!cartList.isEmpty()) {
             String answer = ApplicationObject.getValidation().isValid(
@@ -104,14 +111,31 @@ public class UserMenu implements UserMenuInterface {
             if (answer.equals("yes"))
                 deleteFromCart();
         }
-        String answer = ApplicationObject.getValidation().isValid(
-                Constant.BOOL_QUESTION_REGEX, Constant.VERIFY_PURCHASE, Constant.INVALID_INPUT);
-        if (answer.equals("yes"))
-            purchase(cartList);
+        if (!cartList.isEmpty()) {
+            String answer = ApplicationObject.getValidation().isValid(
+                    Constant.BOOL_QUESTION_REGEX, Constant.VERIFY_PURCHASE, Constant.INVALID_INPUT);
+            if (answer.equals("yes"))
+                purchase();
+        }
         PrintMessage.printMenu(Constant.Dashboard_MENU_ITEM);
     }
 
-    private void purchase(Map<Integer, Product> cartList) {
+    private void purchase() throws SQLException {
+
+        Order order=new Order();
+
+        for (Map.Entry<Integer,Product> pair: cartList.entrySet()) {
+            order.setUsername(username);
+            order.setPrice(pair.getValue().getPrice()*pair.getValue().getCount());
+            order.setProductId(pair.getValue().getId());
+            order.setCount(pair.getValue().getCurrentCount());
+            new OrderRepo<Integer,Order>().insert(order);
+            new ProductRepo<Integer,Product>().update(pair.getValue());
+            PrintMessage.showMsg("Purchase completed !");
+
+        }
+
+
     }
 
     @Override
@@ -135,7 +159,6 @@ public class UserMenu implements UserMenuInterface {
                 login();
             else PrintMessage.printMenu(Constant.PUBLIC_MENU_ITEM);//Menu.runPublicMenu();
         } else {
-            productRepo.findAll();
             addToCart();
         }
     }
