@@ -64,9 +64,13 @@ public class UserMenu implements UserMenuInterface {
             int productId = Integer.parseInt(ApplicationObject.getValidation().isValid(Constant.SINGLE_NUMBER_REGEX,
                     Constant.ENTER_PRODUCT_ID, Constant.INVALID_INPUT));
             if (productId == 0) break;
+            int count = Integer.parseInt(ApplicationObject.getValidation().isValid(Constant.SINGLE_NUMBER_REGEX,
+                    Constant.ENTER_PRODUCT_COUNT, Constant.INVALID_INPUT));
             if (productRepo.isExist(productId, "id")) {
                 if (cartList.size() < 5) {
-                    cartList.put(productId, productRepo.find(productId, "*", "id"));
+                    if (productRepo.find(productId, "*", "id").getCount() >= count)
+                        cartList.put(productId, productRepo.find(productId, "*", "id"));
+                    else PrintMessage.showMsg(Constant.COUNT_NOT_ENOUGH);
                 } else {
                     PrintMessage.showMsg(Constant.MAX_ITEM);
                     break;
@@ -74,19 +78,40 @@ public class UserMenu implements UserMenuInterface {
             } else PrintMessage.showMsg(Constant.ID_NOT_FOUND);
         }
         PrintMessage.printMenu(Constant.Dashboard_MENU_ITEM);
-
     }
 
     @Override
     public void deleteFromCart() throws SQLException {
-
+        while (true) {
+            if (cartList.isEmpty()) break;
+            int id = Integer.parseInt(ApplicationObject.getValidation().isValid(Constant.SINGLE_NUMBER_REGEX,
+                    Constant.ENTER_PRODUCT_ID, Constant.INVALID_INPUT));
+            if (id == 0) break;
+            if (cartList.containsKey(id))
+                cartList.remove(id);
+            else
+                PrintMessage.showMsg(Constant.ID_NOT_FOUND);
+        }
     }
 
     @Override
     public void showCart() throws SQLException {
+        if (cartList.isEmpty())PrintMessage.showMsg(Constant.CART_IS_EMPTY);
         PrintMessage.printCartItem(cartList);
+        if (!cartList.isEmpty()) {
+            String answer = ApplicationObject.getValidation().isValid(
+                    Constant.BOOL_QUESTION_REGEX, Constant.DELETE_ANY_ITEM_FROM_CART, Constant.INVALID_INPUT);
+            if (answer.equals("yes"))
+                deleteFromCart();
+        }
+        String answer = ApplicationObject.getValidation().isValid(
+                Constant.BOOL_QUESTION_REGEX, Constant.VERIFY_PURCHASE, Constant.INVALID_INPUT);
+        if (answer.equals("yes"))
+            purchase(cartList);
         PrintMessage.printMenu(Constant.Dashboard_MENU_ITEM);
+    }
 
+    private void purchase(Map<Integer, Product> cartList) {
     }
 
     @Override

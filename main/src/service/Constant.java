@@ -50,4 +50,9 @@ public class Constant {
     public static final String ENTER_PRODUCT_ID = "Enter product id to add: ";
     public static final String ID_NOT_FOUND = "Sorry , this product id not found !";
     public static final String MAX_ITEM = "Maximum item in cart is 5 .";
+    public static final String ENTER_PRODUCT_COUNT = "Enter count of product: ";
+    public static final String COUNT_NOT_ENOUGH = "Inventory is not enough !";
+    public static final String DELETE_ANY_ITEM_FROM_CART = "Do you want to delete any item from cart ? ";
+    public static final String CART_IS_EMPTY = "Cart is empty";
+    public static final String VERIFY_PURCHASE = "Do you want to finish and purchase?";
 }

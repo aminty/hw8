@@ -40,6 +40,7 @@ public class ProductRepo<R, T> implements BaseRepo<R, T> {
             product.setId(rs.getInt("id"));
             product.setName(rs.getString("name"));
             product.setPrice(rs.getInt("price"));
+            product.setCount(rs.getInt("count"));
             return (R) product;
         }
         return (R) product;
@@ -86,7 +87,7 @@ public class ProductRepo<R, T> implements BaseRepo<R, T> {
         st.executeUpdate("CREATE TABLE IF NOT EXISTS product (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY ," +
                 "name VARCHAR (20)," +
-                "count double ," +
+                "count int ," +
                 "sub_cat_id int ," +
                 "main_cat_id int ," +
                 "price int ," +
