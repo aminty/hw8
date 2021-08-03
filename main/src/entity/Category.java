@@ -1,9 +1,10 @@
 package entity;
 
-public class Category {
+import base.entity.BaseEntity;
+
+public class Category extends BaseEntity <Integer>{
 
     private String name;
-    private int id;
 
     public String getName() {
         return name;
@@ -13,11 +14,5 @@ public class Category {
         this.name = name;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 }

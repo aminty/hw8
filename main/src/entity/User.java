@@ -1,19 +1,14 @@
 package entity;
 
-public class User {
-    private int id;
+import base.entity.BaseEntity;
+
+public class User extends BaseEntity<Integer> {
     private String firstName;
     private  String lastName;
     private String username;
     private String password;
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;

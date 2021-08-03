@@ -1,7 +1,8 @@
 package entity;
 
-public class Product {
-   private int id;
+import base.entity.BaseEntity;
+
+public class Product extends BaseEntity<Integer> {
     private String name;
     private String category;
     private int price;
@@ -11,8 +12,8 @@ public class Product {
     public Product(){
 
     }
-    public Product(int id, String name, String category, int price,int count) {
-        this.id = id;
+    public Product( String name, String category, int price,int count) {
+
         this.name = name;
         this.category = category;
         this.price = price;
@@ -33,14 +34,6 @@ public class Product {
 
     public void setCount(int count) {
         this.count = count;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
