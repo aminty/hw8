@@ -1,6 +1,10 @@
 package service;
 
 import repo.*;
+import repo.impl.CategoryRepositotryImpl;
+import repo.impl.OrderRepositotryImpl;
+import repo.impl.ProductRepositotryImpl;
+import repo.impl.UserRepositotryImpl;
 import service.menu.UserMenu;
 
 import java.sql.Connection;
@@ -13,30 +17,29 @@ public class ApplicationObject {
         return connection;
     }
 
-    private static UserRepo userRepo = new UserRepo();
-    private static ProductRepo productRepo = new ProductRepo();
-    private static OrderRepo orderRepo = new OrderRepo();
-    private static CategoryRepo categoryRepo = new CategoryRepo();
+    private static ProductRepositotryImpl productRepo = new ProductRepositotryImpl(connection);
+    private static OrderRepositotryImpl orderRepo = new OrderRepositotryImpl(connection);
+    private static CategoryRepositotryImpl categoryRepo = new CategoryRepositotryImpl(connection);
     private static Validation validation = new Validation();
     private static UserMenu userMenu = new UserMenu();
-
+    private static UserRepositotryImpl userRepositotry=new UserRepositotryImpl(connection);
     public static UserMenu getUserMenu() {
         return userMenu;
     }
 
-    public static UserRepo getUserRepo() {
-        return userRepo;
+    public static UserRepositotryImpl getUserRepo() {
+        return userRepositotry;
     }
 
-    public static CategoryRepo getCategoryRepo() {
+    public static CategoryRepositotryImpl getCategoryRepo() {
         return categoryRepo;
     }
 
-    public static OrderRepo getOrderRepo() {
+    public static OrderRepositotryImpl getOrderRepo() {
         return orderRepo;
     }
 
-    public static ProductRepo getProductRepo() {
+    public static ProductRepositotryImpl getProductRepo() {
         return productRepo;
     }
 
@@ -45,8 +48,6 @@ public class ApplicationObject {
         getCategoryRepo().createTable();
         getProductRepo().createTable();
         getOrderRepo().createTable();
-
-
     }
 
     public static Validation getValidation() {

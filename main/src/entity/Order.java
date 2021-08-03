@@ -1,6 +1,8 @@
 package entity;
 
-public class Order {
+import base.entity.BaseEntity;
+
+public class Order extends BaseEntity<Integer> {
 
     private String username;
     private int productId;

@@ -3,9 +3,6 @@ package service.menu;
 import entity.Order;
 import entity.Product;
 import entity.User;
-import repo.OrderRepo;
-import repo.ProductRepo;
-import repo.UserRepo;
 import service.ApplicationObject;
 import service.Constant;
 import service.PrintMessage;
@@ -22,7 +19,7 @@ public class UserMenu implements UserMenuInterface {
     @Override
     public void signup() throws SQLException {
         User user = new User();
-        UserRepo<String, User> userRepo = new UserRepo<>();
+
         String name = ApplicationObject.getValidation().isValid(Constant.FIRST_NAME_REGEX,
                 Constant.ENTER_NAME, Constant.INVALID_INPUT);
         if (name.equals("0")) Menu.runPublicMenu();
@@ -31,26 +28,25 @@ public class UserMenu implements UserMenuInterface {
                 Constant.ENTER_LAST_NAME, Constant.INVALID_INPUT);
         if (lastName.equals("0")) Menu.runPublicMenu();
         user.setLastName(lastName);
-        String username = isUserExist(new UserRepo<Boolean, String>(), Constant.USERNAME_COL);
+        String username = isUserExist(Constant.USERNAME_COL);
         if (username.equals("0")) Menu.runPublicMenu();
         user.setUsername(username);
         String password = ApplicationObject.getValidation().isValid(Constant.PASSWORD_REGEX,
                 Constant.CHOOSE_PASSWORD, Constant.INVALID_INPUT);
         if (password.equals("0")) Menu.runPublicMenu();
         user.setPassword(password);
-        userRepo.insert(user);
+        ApplicationObject.getUserRepo().insert(user);
         Menu.runPublicMenu();
     }
 
     @Override
     public void login() throws SQLException {
-        UserRepo<String, String> userRepo = new UserRepo<>();
         String username = ApplicationObject.getValidation().isValid(Constant.USERNAME_REGEX,
                 Constant.ENTER_YOUR_USERNAME, Constant.INVALID_INPUT);
-        if (userRepo.isExist(username, Constant.USERNAME_COL)) {
+        if (ApplicationObject.getUserRepo().isExist(username, Constant.USERNAME_COL)) {
             String password = ApplicationObject.getValidation().isValid(Constant.USERNAME_REGEX,
                     Constant.ENTER_YOUR_PASSWORD, Constant.INVALID_INPUT);
-            String realPass = userRepo.find(username, Constant.PASSWORD_COL, Constant.USERNAME_COL);
+            String realPass = ApplicationObject.getUserRepo().findByColumn(username, Constant.PASSWORD_COL, Constant.USERNAME_COL);
             if (realPass.equals(password)) {
                 PrintMessage.showMsg(Constant.SUCCESS_LOGIN);
                 isLoggedIn = true;
@@ -64,16 +60,15 @@ public class UserMenu implements UserMenuInterface {
     @Override
     public void addToCart() throws SQLException {
         Product product;
-        ProductRepo<Product, Integer> productRepo = new ProductRepo<>();
         while (true) {
             int productId = Integer.parseInt(ApplicationObject.getValidation().isValid(Constant.SINGLE_NUMBER_REGEX,
                     Constant.ENTER_PRODUCT_ID, Constant.INVALID_INPUT));
             if (productId == 0) break;
             int count = Integer.parseInt(ApplicationObject.getValidation().isValid(Constant.SINGLE_NUMBER_REGEX,
                     Constant.ENTER_PRODUCT_COUNT, Constant.INVALID_INPUT));
-            if (productRepo.isExist(productId, "id")) {
+            if (ApplicationObject.getProductRepo().isExist(productId, "id")) {
                 if (cartList.size() < 5) {
-                    product = productRepo.find(productId, "*", "id");
+                    product = ApplicationObject.getProductRepo().findByColumn(productId, "*", "id");
                     product.setCurrentCount(count);
                     if (product.getCount() >= count)
                         cartList.put(productId, product);
@@ -129,8 +124,8 @@ public class UserMenu implements UserMenuInterface {
             order.setPrice(pair.getValue().getPrice()*pair.getValue().getCount());
             order.setProductId(pair.getValue().getId());
             order.setCount(pair.getValue().getCurrentCount());
-            new OrderRepo<Integer,Order>().insert(order);
-            new ProductRepo<Integer,Product>().update(pair.getValue());
+            ApplicationObject.getOrderRepo().insert(order);
+            ApplicationObject.getProductRepo().update(pair.getValue());
             PrintMessage.showMsg("Purchase completed !");
 
         }
@@ -145,13 +140,10 @@ public class UserMenu implements UserMenuInterface {
 
     @Override
     public void changePassword() throws SQLException {
-
     }
-
     @Override
     public void showProductWithoutLognin() throws SQLException {
-        ProductRepo productRepo = new ProductRepo();
-        productRepo.findAll();
+        ApplicationObject.getProductRepo().findAll();
         if (!isLoggedIn) {
             if (ApplicationObject.getValidation().isValid(Constant.BOOL_QUESTION_REGEX,
                     "You must be logged in to purchase.\nDo you want to login?",
@@ -162,14 +154,11 @@ public class UserMenu implements UserMenuInterface {
             addToCart();
         }
     }
-
-
-    private <R, T> String isUserExist(UserRepo<R, T> userRepo, String column) throws SQLException {
+    private String isUserExist(String column) throws SQLException {
         while (true) {
             String uniqueUsername = ApplicationObject.getValidation().isValid(Constant.USERNAME_REGEX,
                     Constant.CHOOSE_USERNAME, Constant.INVALID_INPUT);
-            //todo Q3 (T)cast
-            if (!userRepo.isExist((T) uniqueUsername, column))
+            if (!ApplicationObject.getUserRepo().isExist( uniqueUsername, column))
                 return uniqueUsername;
             else PrintMessage.showMsg(Constant.USER_IS_EXIST);
         }

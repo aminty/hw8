@@ -1,31 +1,20 @@
-package repo;
+package repo.impl;
 
+import base.repo.impl.BaseRepositoryImpl;
 import entity.Product;
 import service.ApplicationObject;
 import service.PrintMessage;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
-public class ProductRepo<R, T> implements BaseRepo<R, T> {
-
-    @Override
-    public boolean isExist(T arg, String column) throws SQLException {
-            PreparedStatement ps = ApplicationObject.getConnection().prepareStatement(
-                    "select * from product where " + column + "=?");
-            if (arg.getClass().getSimpleName().equals(String.class.getSimpleName()))
-                ps.setString(1, (String) arg);
-            if (arg.getClass().getSimpleName().equals(Integer.class.getSimpleName()))
-                ps.setInt(1, (Integer) arg);
-            ResultSet rs = ps.executeQuery();
-            return rs.next();
+public class ProductRepositotryImpl extends BaseRepositoryImpl<Product,Integer> {
+    public ProductRepositotryImpl(Connection connection) {
+        super(connection);
     }
 
     @Override
-    public R find(T arg, String beSelect, String whichColumn) throws SQLException {
+    public <R, T> R findByColumn(T arg, String beSelect, String whichColumn) throws SQLException {
         Product product=new Product();
         PreparedStatement ps=ApplicationObject.getConnection().prepareStatement(
                 "select "+beSelect+" from product where "+ whichColumn +" = ?;"
@@ -44,6 +33,31 @@ public class ProductRepo<R, T> implements BaseRepo<R, T> {
             return (R) product;
         }
         return (R) product;
+    }
+
+    @Override
+    public <T> boolean isExist(T arg, String column) throws SQLException {
+        PreparedStatement ps = ApplicationObject.getConnection().prepareStatement(
+                "select * from product where " + column + "=?");
+
+            ps.setObject(1,  arg);
+        ResultSet rs = ps.executeQuery();
+        return rs.next();
+    }
+
+    @Override
+    public void insert(Product product) {
+
+    }
+
+    @Override
+    public Product update(Product product) throws SQLException {
+        PreparedStatement ps =ApplicationObject.getConnection().prepareStatement(
+                "update product set count=? where id=?");
+        ps.setInt(1,product.getCount()-product.getCurrentCount());
+        ps.setInt(2,product.getId());
+        ps.executeUpdate();
+        return product;
     }
 
     @Override
@@ -70,25 +84,21 @@ public class ProductRepo<R, T> implements BaseRepo<R, T> {
     }
 
     @Override
-    public void delete(T arg) throws SQLException {
+    public Product[] findAllById(Integer[] integers) {
+        return new Product[0];
     }
 
     @Override
-    public void update(T arg) throws SQLException {
-        Product product=(Product)arg;
-        PreparedStatement ps =ApplicationObject.getConnection().prepareStatement(
-                "update product set count=? where id=?");
-        ps.setInt(1,product.getCount()-product.getCurrentCount());
-        ps.setInt(2,product.getId());
-        ps.executeUpdate();
+    public void deleteById(Integer integer) {
+    }
+    @Override
+    public Product findById(Integer integer) {
+        return null;
     }
 
     @Override
-    public void insert(T arg) throws SQLException {
-
-
-
-
+    public Boolean existsById(Integer integer) {
+        return null;
     }
 
     @Override
@@ -104,5 +114,9 @@ public class ProductRepo<R, T> implements BaseRepo<R, T> {
                 "Foreign Key  (main_cat_id) references main_category(id)," +
                 "FOREIGN KEY (sub_cat_id) references sub_category(id))");
         st.close();
+
     }
-}
+
+
+    }
+

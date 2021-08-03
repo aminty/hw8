@@ -3,13 +3,19 @@ package base.repo;
 
 import base.entity.BaseEntity;
 
+import java.sql.SQLException;
+
 public interface BaseRepository<E extends BaseEntity<ID>, ID> {
 
-    E save(E e);
+    <R, T> R findByColumn(T t, String beSelect, String whichColumn) throws SQLException;
 
-    E update(E e);
+    <T> boolean isExist(T arg, String column) throws SQLException;
 
-    E[] findAll();
+    void insert(E e) throws SQLException;
+
+    E update(E e) throws SQLException;
+
+    void findAll() throws SQLException;
 
     E[] findAllById(ID[] ids);
 
@@ -18,4 +24,6 @@ public interface BaseRepository<E extends BaseEntity<ID>, ID> {
     E findById(ID id);
 
     Boolean existsById(ID id);
+
+    void createTable() throws SQLException;
 }
